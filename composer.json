@@ -1,11 +1,12 @@
 {
+    "name": "cm/neos-jsonoutput",
     "description": "",
     "type": "neos-plugin",
     "require": {
         "neos/neos": "~3.0.0",
         "neos/nodetypes": "~3.0.0"
     },
-    "name": "cm/neos-jsonoutput",
+    "license": "GPL-3.0+",
     "autoload": {
         "psr-4": {
             "CM\\Neos\\JsonOutput\\": "Classes/"
