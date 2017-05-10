@@ -3,7 +3,7 @@
 This is a package to show one way to implement an additional json view for Neos pages. The JSON view get rendered 
 by adding a `.json` to the url (instead of `.html`);
 
-##Quickstart:
+## Quickstart:
 1) `composer install`
 2) Run neos: `./flow server:run`
 3) Access Site on `http://127.0.0.1:8081`
@@ -32,7 +32,7 @@ added e.g. to your site package. Every NodeType which is used and should show up
 to be declared.
 
 
-##Custom NodeType as valid json
+## Custom NodeType as valid json
 
 A teaser NodeType which has the properties: title, image and text 
 
