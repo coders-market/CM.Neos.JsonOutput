@@ -1,0 +1,19 @@
+{
+    "description": "",
+    "type": "neos-plugin",
+    "require": {
+        "neos/neos": "~3.0.0",
+        "neos/nodetypes": "~3.0.0"
+    },
+    "name": "cm/neos-jsonoutput",
+    "autoload": {
+        "psr-4": {
+            "CM\\Neos\\JsonOutput\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "CM.Neos.JsonOuput"
+        }
+    }
+}

@@ -1,0 +1,117 @@
+
+# Json helper objects
+prototype(CM.Neos.JsonOuput:JsonObject) < prototype(Neos.Fusion:RawArray) {
+	@process.1 = ${Json.stringify(value)}
+}
+
+json = Neos.Fusion:Http.Message {
+	httpResponseHead {
+		headers.Content-Type = 'application/json;charset=utf-8'
+	}
+	content = Neos.Fusion:Case {
+		page {
+			condition = ${true}
+			type = 'CM.Neos.JsonOuput:PageJson'
+		}
+	}
+}
+
+
+
+prototype(CM.Neos.JsonOuput:HeadlineJson) < prototype(CM.Neos.JsonOuput:JsonObject) {
+	title = ${q(node).property('title')}
+}
+
+prototype(CM.Neos.JsonOuput:TextJson) < prototype(CM.Neos.JsonOuput:JsonObject) {
+	text = ${q(node).property('text')}
+}
+
+prototype(CM.Neos.JsonOuput:ImageJson) < prototype(CM.Neos.JsonOuput:JsonObject) {
+	imageUri = Neos.Neos:ImageUri {
+		asset = ${q(node).property('image')}
+		width = 100
+		height = 100
+		allowCropping = TRUE
+		allowUpScaling = TRUE
+	}
+}
+
+prototype(CM.Neos.JsonOuput:TextWithImageJson) < prototype(CM.Neos.JsonOuput:JsonObject) {
+	imageUri = Neos.Neos:ImageUri {
+		asset = ${q(node).property('image')}
+		width = 100
+		height = 100
+		allowCropping = TRUE
+		allowUpScaling = TRUE
+	}
+
+	text = ${q(node).property('text')}
+}
+
+
+prototype(CM.Neos.JsonOuput:PageJson) < prototype(CM.Neos.JsonOuput:JsonObject) {
+	bodycontent = Neos.Fusion:Collection {
+		collection = ${q(node).children('main').children()}
+		itemRenderer = CM.Neos.JsonOuput:ContentCaseJson
+		itemName = 'node'
+	}
+
+	moreContent = Neos.Fusion:Value {
+		value = 'Testing value just to demonstrate output'
+	}
+
+	# Uncached for development
+    @cache {
+		mode = 'uncached'
+		context {
+			1 = 'node'
+			2 = 'documentNode'
+		}
+	}
+
+	# Cache pages for faster rendering
+#    @cache {
+#        mode = 'cached'
+#        entryTags {
+#            1 = ${'Node_' + node.identifier}
+#            2 = ${'DescendantOf_' + node.identifier}
+#        }
+#    }
+}
+
+
+# Add every type you use to this Content Case list to get rendered as json
+prototype(CM.Neos.JsonOuput:ContentCaseJson) < prototype(Neos.Fusion:Case) {
+
+	teaser {
+		condition = ${q(node).is('[instanceof CM.Neos.JsonOuput:Teaser]')}
+		type = ${'CM.Neos.JsonOuput:TeaserJson'}
+	}
+
+	headline {
+		condition = ${q(node).is('[instanceof Neos.NodeTypes:Headline]')}
+		type = ${'CM.Neos.JsonOuput:HeadlineJson'}
+	}
+
+	text {
+		condition = ${q(node).is('[instanceof Neos.NodeTypes:Text]')}
+		type = ${'CM.Neos.JsonOuput:TextJson'}
+	}
+
+	image {
+		condition = ${q(node).is('[instanceof Neos.NodeTypes:Image]')}
+		type = ${'CM.Neos.JsonOuput:ImageJson'}
+	}
+
+	textWithImage {
+		condition = ${q(node).is('[instanceof Neos.NodeTypes:TextWithImage]')}
+		type = ${'CM.Neos.JsonOuput:TextWithImageJson'}
+	}
+
+
+	default {
+		@position = 'end'
+		condition = TRUE
+		type = ${q(node).property('_nodeType.name')}
+	}
+}
